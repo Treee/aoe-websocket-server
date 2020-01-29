@@ -3,15 +3,16 @@ FROM centos
 # ADD ./install-nvm.sh .
 # RUN chmod +x install-nvm.sh
 # RUN ./install-nvm.sh
+RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash -
 
 RUN yum update && \
     yum upgrade -y && \
     yum install -y git && \
-    yum install -y gcc-c++ make && \ 
+    yum install -y gcc-c++ make && \
+    yum install -y nodejs && \ 
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash -
 
 # ADD ./install-dependencies.sh .
 # RUN chmod +x install-dependencies.sh
