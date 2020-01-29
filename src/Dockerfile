@@ -6,7 +6,7 @@ FROM centos
 
 RUN yum update && \
     yum upgrade -y && \
-    yum install -y git \
+    yum install -y git && \
     yum install -y gcc-c++ make
 
 RUN curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
