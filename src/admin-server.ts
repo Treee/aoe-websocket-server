@@ -68,8 +68,8 @@ export class AdminServer {
             });
         });
 
-        this.adminServer.listen(8443);
-        console.log('Listening on port 8443');
+        this.adminServer.listen(8445);
+        console.log('Listening on port 8445');
     }
 
     formatDataForWebsocket(dataType: ServerEnums, rawData: any): string {
