@@ -7,9 +7,11 @@ FROM centos
 RUN yum update && \
     yum upgrade -y && \
     yum install -y git && \
-    yum install -y gcc-c++ make
+    yum install -y gcc-c++ make && \ 
+    yum clean all && \
+    rm -rf /var/cache/yum
 
-RUN curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
+RUN curl -sL https://rpm.nodesource.com/setup_12.x | bash -
 
 # ADD ./install-dependencies.sh .
 # RUN chmod +x install-dependencies.sh
