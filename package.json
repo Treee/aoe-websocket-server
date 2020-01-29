@@ -1,0 +1,22 @@
+{
+  "name": "aoe-websocket-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./build/admin-server.js"
+  },
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@types/uuid": "^3.4.7",
+    "@types/ws": "^7.2.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "uuid": "^3.4.0",
+    "ws": "^7.2.1"
+  }
+}
