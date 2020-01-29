@@ -1,5 +1,6 @@
 FROM centos
 
+ADD ./install-nvm.sh .
 RUN ./install-nvm.sh
 
 RUN yum update && \
