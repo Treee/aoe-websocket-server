@@ -4,6 +4,8 @@ ADD ./install-nvm.sh .
 RUN chmod +x install-nvm.sh
 RUN ./install-nvm.sh
 
+RUN nvm install node
+
 RUN yum update && \
     yum upgrade -y && \
     yum install -y git
