@@ -1,12 +1,10 @@
 FROM centos
 
+RUN ./install-nvm.sh
+
 RUN yum update && \
     yum upgrade -y && \
     yum install -y git
-
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-
-RUN nvm install node
 
 RUN git clone https://github.com/Treee/aoe-websocket-server
 
