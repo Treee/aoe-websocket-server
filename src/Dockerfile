@@ -8,12 +8,13 @@ RUN yum update && \
     yum upgrade -y && \
     yum install -y git
 
-RUN git clone https://github.com/Treee/aoe-websocket-server
-
-RUN cd aoe-websocket-server
-
-RUN npm install
+ADD ./install-dependencies.sh .
+RUN chmod +x install-dependencies.sh
+RUN ./install-dependencies.sh
 
 EXPOSE 8443
 
-CMD ["npm", "start-server"]
+ADD ./start-server.sh .
+RUN chmod +x start-server.sh
+
+CMD ./start-server.sh
