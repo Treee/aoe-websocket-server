@@ -1,9 +1,18 @@
-FROM node:alpine
+FROM centos:alpine
 
-RUN ["git", "clone", "https://github.com/Treee/aoe-websocket-server"]
-RUN ["cd", "aoe-websocket-server"]
+RUN yum update && \
+    yum upgrade -y && \
+    yum install -y git
 
-RUN ["npm", "install"]
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+
+RUN nvm install node
+
+RUN git clone https://github.com/Treee/aoe-websocket-server
+
+RUN cd aoe-websocket-server
+
+RUN npm install
 
 EXPOSE 8443
 
