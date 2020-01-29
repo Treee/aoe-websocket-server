@@ -1,4 +1,4 @@
-FROM centos:alpine
+FROM alpine:3.9
 
 RUN yum update && \
     yum upgrade -y && \
