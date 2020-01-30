@@ -8,6 +8,6 @@ RUN cd aoe-websocket-server && npm install && npm run build
 
 EXPOSE 8443
 
-ADD ./start-docker.sh des.
-RUN chmod +x ./start-docker.sh
-CMD ./start-docker.sh
+ADD ./start-server.sh .
+RUN chmod +x ./start-server.sh
+CMD ./start-server.sh
