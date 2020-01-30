@@ -4,10 +4,15 @@ RUN apk add --update npm
 RUN apk add --update git
 
 RUN git clone https://github.com/Treee/aoe-websocket-server
-RUN cd aoe-websocket-server && npm install && npm run build
+
+WORKDIR /aoe-websocket-server
+COPY ../package.json .
+RUN npm install && npm run build
+
+COPY ../. /aoe-websocket-server
 
 EXPOSE 8443
 
-ADD ./start-server.sh .
+COPY ./start-server.sh .
 RUN chmod +x ./start-server.sh
 CMD ./start-server.sh
