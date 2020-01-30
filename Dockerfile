@@ -1,11 +1,18 @@
-FROM nginx:alpine
+FROM alpine
 
-RUN apk add --update certbot-nginx
+RUN apk add --update npm
+RUN apk add --update git
 
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN git clone https://github.com/Treee/aoe-websocket-server
 
-RUN certbot certonly --nginx 
+WORKDIR /aoe-websocket-server
+COPY ../package.json .
+RUN npm install && npm run build
 
-# COPY nginx.conf /usr/share/nginx/html
+COPY /build /aoe-websocket-server/build
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8443
+
+COPY ./start-server.sh .
+RUN chmod +x ./start-server.sh
+CMD ./start-server.sh
