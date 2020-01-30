@@ -8,4 +8,4 @@ RUN cd aoe-websocket-server && npm install
 
 EXPOSE 8443
 
-CMD npm start
+CMD cd aoe-websocket-server && npm start
