@@ -5,7 +5,7 @@ RUN apk add --update git
 
 WORKDIR /aoe-websocket-server
 COPY package.json /aoe-websocket-server/package.json
-RUN npm install && npm run build
+RUN cd aoe-websocket-server && npm install && npm run build
 
 COPY . /aoe-websocket-server
 
