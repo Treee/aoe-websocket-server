@@ -13,4 +13,4 @@ RUN npm run build
 EXPOSE 8443
 EXPOSE 8445
 
-CMD /bin/sh npm start
+CMD ["node", "build/admin-server.js"]
