@@ -3,13 +3,11 @@ FROM alpine
 RUN apk add --update npm
 RUN apk add --update git
 
-RUN git clone https://github.com/Treee/aoe-websocket-server
-
 WORKDIR /aoe-websocket-server
 COPY package.json .
 RUN npm install && npm run build
 
-COPY build/ /aoe-websocket-server/build
+COPY . /aoe-websocket-server
 
 EXPOSE 8443
 
