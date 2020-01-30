@@ -13,6 +13,4 @@ RUN npm run build
 EXPOSE 8443
 EXPOSE 8445
 
-RUN chmod +x start-server.sh
-
-CMD ./start-server.sh
+CMD /bin/sh npm start
