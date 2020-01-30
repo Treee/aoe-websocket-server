@@ -11,5 +11,8 @@ COPY . /aoe-websocket-server
 RUN npm run build
 
 EXPOSE 8443
+EXPOSE 8445
 
-CMD npm start
+RUN chmod +x start-server.sh
+
+CMD ./start-server.sh
