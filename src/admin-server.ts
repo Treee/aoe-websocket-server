@@ -15,8 +15,8 @@ export class AdminServer {
     constructor() {
 
         const server = https.createServer({
-            cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
-            key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
+            // cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
+            // key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
         });
 
         this.adminServer = server;
