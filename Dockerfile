@@ -10,7 +10,6 @@ COPY . /aoe-websocket-server
 RUN npm run build
 
 EXPOSE 8443
-EXPOSE 8445
 EXPOSE 443
 EXPOSE 80
 

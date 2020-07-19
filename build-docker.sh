@@ -1,1 +1,1 @@
-docker build -t aoe-tech-websockets:latest
+docker build . -t aoe-tech-websockets:latest
