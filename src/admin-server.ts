@@ -3,7 +3,7 @@ import https = require('https');
 import fs = require('fs');
 
 import { v4 } from 'uuid';
-import { ServerEnums } from './server-enums';
+import { SocketEnums } from './server-enums';
 
 export class AdminServer {
 
@@ -15,8 +15,8 @@ export class AdminServer {
     constructor() {
 
         const server = https.createServer({
-            // cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
-            // key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
+            cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
+            key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
         });
 
         this.adminServer = server;
@@ -35,7 +35,7 @@ export class AdminServer {
 
             const uuid = v4();
             console.log(`registered user: ${uuid}`);
-            ws.send(this.formatDataForWebsocket(ServerEnums.ClientRegister, uuid));
+            ws.send(this.formatDataForWebsocket(SocketEnums.ClientRegister, uuid));
             // this.clients[uuid] = ws;
 
 
@@ -43,17 +43,21 @@ export class AdminServer {
                 console.log(message);
                 const msg = JSON.parse(message);
 
-                if (msg.type === ServerEnums.ClientRegister) {
+                if (msg.type === SocketEnums.ClientRegister) {
                     this.clients[msg.data] = ws;
                 }
 
                 const websocket = this.clients[msg.toClientId];
                 console.log(`msg: ${msg} socket: ${!!websocket}`, msg);
                 if (websocket) {
-                    if (msg.type === ServerEnums.AdminShowCiv) {
-                        websocket.send(this.formatDataForWebsocket(ServerEnums.AdminShowCiv, msg.data))
-                    } else if (msg.type === ServerEnums.AdminHideCiv) {
-                        websocket.send(this.formatDataForWebsocket(ServerEnums.AdminHideCiv, msg.data))
+                    let validMessageType = false;
+                    for (let socketEnum in SocketEnums) {
+                        validMessageType = validMessageType || (socketEnum == msg.type)
+                        // console.log(`checking msgType:${msg.type} again ${socketEnum} result:${(socketEnum == msg.type)}`);
+                    }
+                    if (validMessageType) {
+                        // console.log('sending to client');
+                        websocket.send(this.formatDataForWebsocket(msg.type, msg.data))
                     }
                 }
             });
@@ -68,11 +72,11 @@ export class AdminServer {
             });
         });
 
-        this.adminServer.listen(8445);
-        console.log('Listening on port 8445');
+        this.adminServer.listen(8443);
+        console.log('Listening on port 8443');
     }
 
-    formatDataForWebsocket(dataType: ServerEnums, rawData: any): string {
+    formatDataForWebsocket(dataType: SocketEnums, rawData: any): string {
         console.log(`DataType: ${dataType} / RawData: ${rawData}`);
         return JSON.stringify({ type: dataType, data: rawData });
     }
