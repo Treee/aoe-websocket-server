@@ -1,20 +1,23 @@
 import WebSocket = require('ws');
 import https = require('https');
+import http = require('http');
 import fs = require('fs');
 
 import { v4 } from 'uuid';
 import { SocketEnums } from './server-enums';
 
 export class AdminServer {
-
     private adminServerSocket: WebSocket.Server;
 
-    private adminServer: https.Server;
-    private clients: any = {};
+    private adminServer: https.Server | http.Server;
+    private clients: { uuid: string, id: string, socket: WebSocket }[] = [];
+
+    isDebug: boolean = false;
+    port: number = 8443;
 
     constructor() {
 
-        const server = https.createServer({
+        const server = this.isDebug ? http.createServer({}) : https.createServer({
             cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
             key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
         });
@@ -44,12 +47,16 @@ export class AdminServer {
                 const msg = JSON.parse(message);
 
                 if (msg.type === SocketEnums.ClientRegister) {
-                    this.clients[msg.data] = ws;
+                    this.clients.push({ uuid: uuid, id: msg.data, socket: ws });
                 }
 
-                const websocket = this.clients[msg.toClientId];
-                console.log(`msg: ${msg} socket: ${!!websocket}`, msg);
-                if (websocket) {
+                const foundWebsockets = this.clients.filter((socket) => {
+                    return socket.id === msg.toClientId;
+                });
+
+                console.log(`msg: ${msg} sockets: ${!!foundWebsockets}`, msg);
+
+                if (foundWebsockets.length > 0) {
                     let validMessageType = false;
                     for (let socketEnum in SocketEnums) {
                         validMessageType = validMessageType || (socketEnum == msg.type)
@@ -57,7 +64,9 @@ export class AdminServer {
                     }
                     if (validMessageType) {
                         // console.log('sending to client');
-                        websocket.send(this.formatDataForWebsocket(msg.type, msg.data))
+                        foundWebsockets.forEach((websocket) => {
+                            websocket.socket.send(this.formatDataForWebsocket(msg.type, msg.data));
+                        });
                     }
                 }
             });
@@ -67,13 +76,15 @@ export class AdminServer {
             });
 
             ws.on('close', (error) => {
-                delete this.clients[uuid];
-                console.log(`deleted ${uuid}. remaining: ${Object.keys(this.clients).length}`);
+                this.clients = this.clients.filter((sockets) => {
+                    return sockets.uuid !== uuid;
+                });
+                console.log(`deleted ${uuid}. remaining: ${this.clients.length}`);
             });
         });
 
-        this.adminServer.listen(8443);
-        console.log('Listening on port 8443');
+        this.adminServer.listen(this.port);
+        console.log(`Listening on port: ${this.port}`);
     }
 
     formatDataForWebsocket(dataType: SocketEnums, rawData: any): string {
