@@ -13,7 +13,7 @@ export class AdminServer {
     private clients: { uuid: string, id: string, socket: WebSocket }[] = [];
 
     isDebug: boolean = false;
-    port: number = 8443;
+    port: number = parseInt(process.env.SERVER_PORT || '8443');
 
     constructor() {
 

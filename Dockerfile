@@ -1,5 +1,8 @@
 FROM alpine
 
+ARG server_port
+ENV SERVER_PORT ${server_port}
+
 RUN apk add --update npm
 
 WORKDIR /aoe-websocket-server
@@ -9,6 +12,6 @@ RUN npm install
 COPY . /aoe-websocket-server
 RUN npm run build
 
-EXPOSE 8443
+EXPOSE ${server_port}
 
 CMD ["npm", "start"]
