@@ -1,7 +1,4 @@
 import WebSocket = require('ws');
-import https = require('https');
-import http = require('http');
-import fs = require('fs');
 
 import { v4 } from 'uuid';
 import { SocketEnums } from './server-enums';
@@ -9,21 +6,20 @@ import { SocketEnums } from './server-enums';
 export class AdminServer {
     private adminServerSocket: WebSocket.Server;
 
-    private adminServer: https.Server | http.Server;
+    // private adminServer: https.Server | http.Server;
     private clients: { uuid: string, id: string, socket: WebSocket }[] = [];
 
     isDebug: boolean = false;
-    port: number = parseInt(process.env.SERVER_PORT || '8443');
+    socketServerPort: number = parseInt(process.env.SERVER_PORT || '8443');
 
     constructor() {
 
-        const server = this.isDebug ? http.createServer({}) : https.createServer({
-            cert: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/fullchain.pem'),
-            key: fs.readFileSync('/etc/letsencrypt/live/itsatreee.com/privkey.pem')
-        });
+        const serverOptions: WebSocket.ServerOptions = {
+            port: this.socketServerPort
+        };
 
-        this.adminServer = server;
-        this.adminServerSocket = new WebSocket.Server({ server });
+        // this.adminServer = server;
+        this.adminServerSocket = new WebSocket.Server(serverOptions);
         const closeHandle = this.adminServerSocket;
         process.on('SIGHUP', function () {
             closeHandle.close();
@@ -82,9 +78,8 @@ export class AdminServer {
                 console.log(`deleted ${uuid}. remaining: ${this.clients.length}`);
             });
         });
-
-        this.adminServer.listen(this.port);
-        console.log(`Listening on port: ${this.port}`);
+        // this.adminServer.listen(this.port);
+        console.log(`Listening on port: ${this.socketServerPort}`);
     }
 
     formatDataForWebsocket(dataType: SocketEnums, rawData: any): string {
