@@ -41,7 +41,7 @@ export class AdminServer {
                     return socket.id === msg.toClientId;
                 });
                 if (foundWebsockets.length > 0) {
-                    if (message === "PING") {
+                    if (msg.data === "PING") {
                         foundWebsockets.forEach((websocket) => {
                             websocket.socket.send("PONG");
                         });
