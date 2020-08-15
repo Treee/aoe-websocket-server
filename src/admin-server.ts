@@ -41,9 +41,9 @@ export class AdminServer {
                     return socket.id === msg.toClientId;
                 });
                 if (foundWebsockets.length > 0) {
-                    if (msg.data === "PING") {
+                    if (msg.type === "PING") {
                         foundWebsockets.forEach((websocket) => {
-                            websocket.socket.send("PONG");
+                            websocket.socket.send(JSON.stringify({ type: "PONG", data: "PONG" }));
                         });
                     }
                 } else {
