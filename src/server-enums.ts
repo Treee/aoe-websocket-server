@@ -3,7 +3,7 @@ export enum SocketEnums {
     AdminShowAll, AdminHideAll, AdminShowTech, AdminHideTech,
     AdminShowBlacksmith, AdminHideBlacksmith, AdminShowUniversity, AdminHideUniversity,
     AdminShowMonastary, AdminHideMonastary, AdminShowDock, AdminHideDock, AdminShowBracket, AdminHideBracket,
-    AdminShowMaps, AdminHideMaps, AdminShowPlayerPicks, AdminHidePlayerPicks, OverlayPlayerInfo
+    AdminShowMaps, AdminHideMaps, AdminShowPlayerPicks, AdminHidePlayerPicks, OverlayPlayerInfo, PING
 }
 
 export enum OverlayEnums {
